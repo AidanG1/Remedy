@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { encode, decode } from 'uint8-to-b64';
     import { page } from '$app/stores';
     import { supabase } from '$lib/db';
     import { default_message, messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
+    import { decryptMessage, encryptMessage } from '$lib/Utils/crypto';
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
@@ -53,7 +55,29 @@
         )
         .subscribe();
 
-    const send_user_message = (message: string) => {
+    const send_user_message = async (message: string) => {
+        // We're creating a key here just to make sure that we our
+        // encyrption and decryption work fine.
+        // Later, the key will be derived through ECDH.
+        const sharedKey = await window.crypto.subtle.generateKey(
+            { name: 'AES-GCM', length: 256 },
+            false,
+            ['encrypt', 'decrypt'],
+        );
+        const messageBytes = new TextEncoder().encode(message);
+        const [ciphertext, iv] = await encryptMessage(sharedKey, messageBytes);
+        const ciphertextEncoded = encode(ciphertext);
+        const ivEncoded = encode(iv);
+
+        console.log(ciphertext, iv);
+        console.log(ciphertextEncoded, ivEncoded);
+        
+        const ciphertextDecoded = decode(ciphertextEncoded);
+        const ivDecoded = decode(ivEncoded);
+        const decryptedMessage = await decryptMessage(sharedKey, ciphertextDecoded, ivDecoded);
+        
+        console.log('decrypted', new TextDecoder().decode(decryptedMessage));
+
         supabase
             .from('messages')
             .insert([
@@ -61,6 +85,8 @@
                     chat: chat,
                     sender: localStorage.getItem('user_type') ? 'person' : 'user',
                     text: message,
+                    // ciphertext: ciphertextEncoded,
+                    // iv: ivEncoded,
                 },
             ])
             .then(({ data, error }) => {

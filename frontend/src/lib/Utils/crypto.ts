@@ -26,28 +26,36 @@ export const deriveSharedKey = async (
 	return sharedKey;
 };
 
-const encryptMessage = async (
+export const encryptMessage = async (
 	sharedKey: CryptoKey,
 	plaintext: Uint8Array,
 ): [Uint8Array, Uint8Array] => {
-	const iv = window.crypto.getRandomValues(new Uint8Array(12));
-	const ciphertext = await window.crypto.subtle.encrypt(
-		{ ...AES_GCM_PARAMS, iv },
-		sharedKey,
-		plaintext,
-	);
-	return [ciphertext, iv];
+	const iv = await window.crypto.getRandomValues(new Uint8Array(12));
+	let ciphertext;
+	try {
+		ciphertext = await window.crypto.subtle.encrypt(
+			{ ...AES_GCM_PARAMS, iv },
+			sharedKey,
+			plaintext,
+		);
+	} catch (error) {
+		console.log('somethin wrong')
+		console.log(error);
+		throw error;
+	}
+
+	return [new Uint8Array(ciphertext), iv];
 };
 
-const decryptMessage = async (
+export const decryptMessage = async (
 	sharedKey: CryptoKey,
 	ciphertext: Uint8Array,
 	iv: Uint8Array,
 ): Uint8Array => {
-	const plaintext = window.crypto.subtle.decrypt(
+	const plaintext = await window.crypto.subtle.decrypt(
 		{ ...AES_GCM_PARAMS, iv },
 		sharedKey,
 		ciphertext,
 	);
-	return plaintext;
+	return new Uint8Array(plaintext);
 }
