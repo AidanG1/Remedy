@@ -59,7 +59,7 @@
             .insert([
                 {
                     chat: chat,
-                    sender: 'person',
+                    sender: 'user',
                     text: message,
                 },
             ])
