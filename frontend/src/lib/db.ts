@@ -10,7 +10,3 @@ const supabase = createClient(
 	SUPABASE_URL,
 	SUPABASE_PUBLIC_ANON_KEY,
 );
-
-const { data, error } = await supabase.from('users').insert([{}]);
-
-console.log(data, error);
