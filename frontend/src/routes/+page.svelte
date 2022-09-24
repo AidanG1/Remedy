@@ -12,9 +12,8 @@
 <div class="flex">
     <Breadcrumbs />
 </div>
-<div class="hero min-h-full bg-base-200">
+<div class="hero min-h-full bg-base-200 w-full">
     <div class="hero-content text-center">
-
         <div class="max-w-md">
             <h1 class="text-5xl font-bold">{flow[$question_num].question}</h1>
             {#each flow[$question_num].responses as response}
