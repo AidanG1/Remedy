@@ -1,6 +1,7 @@
 interface FlowResponse {
     text: string,
-    next: number
+    next?: number,
+    page?: string
 }
 
 interface FlowStep {
