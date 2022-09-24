@@ -25,16 +25,19 @@
                         on:click={() => {
                             if (button.hyperlink !== undefined) {
                                 window.open(button.hyperlink, '_blank');
-                            } else {       
-                                if (button.next !== undefined) {
-                                    send_flow(button.next);
-                                }
+                            } else {      
                                 if (button.user_send !== undefined) {
                                     send_user_message(button.user_send);
+                                } 
+                                if (button.next !== undefined) {
+                                    send_flow(button.next);
                                 }
                             }
                         }}>
                         {button.text}
+                        {#if button.hyperlink}
+                            <img src="/link.svg" class="ml-2 w-6" alt="link icon">
+                        {/if}
                     </button>
                     {/each}
                 </div>
