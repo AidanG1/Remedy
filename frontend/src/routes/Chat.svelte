@@ -7,9 +7,23 @@
     if ($messages.length == 0) {
         send_flow(0);
     }
+
+    let chatDiv: HTMLElement;
+
+    const scrollToBottom = (messages: any) => {
+        if (chatDiv) {
+            window.setTimeout(() => {
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            }, 500);
+        }
+    }
+
+    $: {
+        scrollToBottom($messages);
+    }
 </script>
 
-<div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-2">
+<div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-2" bind:this={chatDiv}>
     {#each $messages as message}
     <div class="w-full my-1" in:slide>
         <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border drop-shadow-md hover:scale-105 transition-transform { (message.sender==='bot' || message.sender === 'person') ? 'bg-secondary' : 'bg-primary float-right'}">
