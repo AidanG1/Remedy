@@ -72,11 +72,11 @@
 		</ul>
 	</div>
 	<div class="navbar-end">
+        <ThemeChange />
 		<a class="btn">Get started</a>
 	</div>
 </div>
 
-<ThemeChange />
 <div class="container">
 	<slot />
 </div>

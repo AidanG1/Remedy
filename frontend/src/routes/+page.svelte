@@ -1,2 +1,16 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import { flow } from '$lib/Flow/flow';
+
+    let question_num: number = 0;
+</script>
+
+<div class="hero min-h-full bg-base-200">
+    <div class="hero-content text-center">
+        <div class="max-w-md">
+            <h1 class="text-5xl font-bold">{flow[question_num].question}</h1>
+            {#each flow[question_num].responses as response}
+                <button class="btn btn-primary btn-lg m-2" on:click={()=>{question_num = response.next}}>{response.text}</button>
+            {/each}
+        </div>
+    </div>
+</div>
