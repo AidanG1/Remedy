@@ -6,6 +6,7 @@
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
+	import Jisti from './Jisti.svelte';
 
     const chat = $page.params.slug;
 
@@ -69,8 +70,17 @@
                 }
             });
     }
+
+    let meeting: boolean = false;
 </script>
 
+<div class="flex justify-center">
+    <h1  class="mr-2">You are chatting with a verified user</h1>
+    <button on:click={() => {meeting = true;}} class="btn btn-primary">Start encrypted voice or video call</button>
+    {#if meeting}
+        <Jisti chat_id={chat} />
+    {/if}
+</div>
 <Chat />
 {#if $default_message}
 <button class="btn btn-outline" on:click={()=>{send_user_message($default_message); $default_message=''}}>{$default_message}</button>
