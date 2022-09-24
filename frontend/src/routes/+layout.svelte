@@ -75,6 +75,7 @@
 		<a class="btn">Get started</a>
 	</div>
 </div>
+
 <ThemeChange />
 <div class="container">
 	<slot />
