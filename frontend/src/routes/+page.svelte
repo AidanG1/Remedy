@@ -1,30 +1,54 @@
 <script lang="ts">
-    import Breadcrumbs from '$lib/Components/Breadcrumbs.svelte';
-    import { flow } from '$lib/Flow/flow';
-    import {question_num, question_path } from '$lib/Stores/stores';
+    import { flow, send_flow } from '$lib/Flow/flow';
+    import { messages } from '$lib/Stores/stores';
 
-    const question_next = (question: number) => {
-        $question_num = question;
-        $question_path = [...$question_path, question];
-    };
+    if ($messages.length == 0) {
+        send_flow(0);
+    }
 
-    const question_redirect = (url: string) => {
-        window.location.href = url;
-    };
+    const send_user_message = (message: string) => {
+        $messages = [...$messages, { sender: 'user', text: message, timestamp: new Date() }];
+    }
+
+    let message: string = '';
 </script>
 
-<div class="flex">
-    <Breadcrumbs />
+<div class="w-full h-5/6 flex flex-col">
+    {#each $messages as message}
+    <div class="w-full  my-1">
+        <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border border-secondary {message.sender==='bot' ? '' : 'float-right'}">
+            {message.text}
+            {#if 'buttons' in message}
+                <div>
+                    {#each message.buttons !== undefined ? message.buttons : [] as button}
+                        <button class="btn btn-primary m-1" 
+                        on:click={() => {
+                            if (button.hyperlink !== undefined) {
+                                window.open(button.hyperlink, '_blank');
+                            } else {      
+                                if (button.user_send !== undefined) {
+                                    send_user_message(button.user_send);
+                                } 
+                                if (button.next !== undefined) {
+                                    send_flow(button.next);
+                                }
+                            }
+                        }}>
+                        {button.text}
+                        {#if button.hyperlink}
+                            <img src="/link.svg" class="ml-2 w-6" alt="link icon">
+                        {/if}
+                    </button>
+                    {/each}
+                </div>
+            {/if}
+        </div></div>
+    {/each}
 </div>
-<div class="hero min-h-full bg-base-200 w-full">
-    <div class="hero-content text-center">
-        <div class="max-w-md">
-            <h1 class="text-5xl font-bold">{flow[$question_num].question}</h1>
-            {#each flow[$question_num].responses as response}
-                <button class="btn btn-primary btn-lg m-2" on:click={
-                ()=>{'next' in response ? question_next(response.next) : question_redirect(response.page)}
-                }>{response.text}</button>
-            {/each}
-        </div>
-    </div>
+<div>
+    <input type="text" bind:value={message} placeholder="Type a message..." class="input input-bordered input-primary w-5/6" />
+    <button class="btn btn-primary " on:click={() => {
+        send_user_message(message);
+        message = '';
+    }}>Send</button>
 </div>

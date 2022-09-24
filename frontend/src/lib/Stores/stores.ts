@@ -1,4 +1,4 @@
 import { writable, type Writable } from 'svelte/store';
+import type { Message } from '../Utils/types';
 
-export const question_num: Writable<number> = writable(0);
-export const question_path: Writable<number[]> = writable([0]);
+export const messages: Writable<Message[]> = writable([]);
