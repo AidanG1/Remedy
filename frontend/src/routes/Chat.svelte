@@ -13,7 +13,10 @@
     const scrollToBottom = (messages: any) => {
         if (chatDiv) {
             window.setTimeout(() => {
-                chatDiv.scrollTop = chatDiv.scrollHeight;
+                chatDiv.scrollTo({
+                    top: chatDiv.scrollHeight,
+                    behavior: "smooth"
+                });
             }, 500);
         }
     }
