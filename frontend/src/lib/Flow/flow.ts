@@ -6,7 +6,7 @@ interface FlowResponse {
 interface FlowStep {
     question: string,
     short: string,
-    responses: [FlowResponse]
+    responses: FlowResponse[]
 }
 
 export const flow: Record<number, FlowStep> =
