@@ -1,7 +1,8 @@
-type Button = {
+export type Button = {
     text: string,
     user_send?: string,
     hyperlink?: string,
+    next_step?: number
 }
 
 export type Message = {
