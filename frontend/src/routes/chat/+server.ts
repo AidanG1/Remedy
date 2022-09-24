@@ -16,7 +16,7 @@ export async function POST({ request }) {
     }
     const { data: data2, error: error2 } = await supabaseAdmin
         .from('chats')
-        .insert()
+        .insert({})
 
     if (error2) {
         console.log(error2)

@@ -1,6 +1,7 @@
 import type { Button } from "$lib/Utils/types";
 import { messages } from "$lib/Stores/stores";
 import { supabase } from "$lib/db";
+import { goto } from '$app/navigation';
 
 type FlowStep = {
     text: string,
@@ -219,6 +220,7 @@ export const send_flow = (step: number) => {
         return messages
     })
 
+    console.log(step)
     if (create_chats.includes(step)) {
         create_chat()
     }
@@ -228,10 +230,10 @@ const create_chats: number[] = [
     11, 12, 13, 14, 15, 16
 ]
 
-export const create_chat = async () => {
+const create_chat = async () => {
     const { data, error } = await supabase
         .from('users')
-        .insert()
+        .insert({})
     if (error) {
         console.log(error)
     }
@@ -248,5 +250,5 @@ export const create_chat = async () => {
   
       let id = await response.json();
 
-      window.location.href = `/chat/${id}`
+      goto(`/chat/${id.chat_id}`)
 }
