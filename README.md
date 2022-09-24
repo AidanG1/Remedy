@@ -23,6 +23,7 @@ Inspiration
 	- Multiple language support
 		
 ## 🤖Techstack:<a name="tech"></a>
+![lighthouse](lighthouse.png)
 	- Svelte & SvelteKit (frontend)
 	- Supabase (backend)
 	- Tailwind & Daisy (ui & design)
