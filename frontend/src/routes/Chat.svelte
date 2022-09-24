@@ -30,7 +30,7 @@
     {#each $messages as message}
     <div class="w-full my-1" in:slide>
         <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border drop-shadow-md hover:scale-105 transition-transform { (message.sender === 'bot' || message.sender === 'person') ? 'bg-secondary' : 'bg-primary float-right'}">
-            {message.text}
+            <span class="font-semibold">{message.text}</span>
             {#if 'buttons' in message}
                 <div>
                     {#each message.buttons !== undefined ? message.buttons : [] as button}

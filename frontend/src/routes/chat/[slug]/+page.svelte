@@ -39,14 +39,14 @@
         });
 
     supabase.from(`messages:chat=eq.${chat}`)
-        .on('INSERT', (new_chat: SupabaseRealtimePayload<supabaseChat>) => {
-            console.log(new_chat);
+        .on('INSERT', (new_message: SupabaseRealtimePayload<supabaseChat>) => {
+            console.log(new_message);
             $messages = [
                 ...$messages,
                 {
-                    sender: new_chat.new.sender,
-                    text: new_chat.new.text,
-                    timestamp: new Date(new_chat.new.created_at),
+                    sender: new_message.new.sender,
+                    text: new_message.new.text,
+                    timestamp: new Date(new_message.new.created_at),
                 },
             ];
             }
