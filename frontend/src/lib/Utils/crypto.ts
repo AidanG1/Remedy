@@ -6,7 +6,7 @@ const AES_GCM_PARAMS = {
 export const createEcdhKey = async (): CryptoKeyPair => {
 	const ecdhKey = await window.crypto.subtle.generateKey(
 		{ name: 'ECDH', namedCurve: 'P-384' },
-		false,
+		true,
 		['deriveKey'],
 	);
 	return ecdhKey;
@@ -31,18 +31,11 @@ export const encryptMessage = async (
 	plaintext: Uint8Array,
 ): [Uint8Array, Uint8Array] => {
 	const iv = await window.crypto.getRandomValues(new Uint8Array(12));
-	let ciphertext;
-	try {
-		ciphertext = await window.crypto.subtle.encrypt(
-			{ ...AES_GCM_PARAMS, iv },
-			sharedKey,
-			plaintext,
-		);
-	} catch (error) {
-		console.log('somethin wrong')
-		console.log(error);
-		throw error;
-	}
+	const ciphertext = await window.crypto.subtle.encrypt(
+		{ ...AES_GCM_PARAMS, iv },
+		sharedKey,
+		plaintext,
+	);
 
 	return [new Uint8Array(ciphertext), iv];
 };
@@ -59,3 +52,7 @@ export const decryptMessage = async (
 	);
 	return new Uint8Array(plaintext);
 }
+
+export const exportKey = async (key: CryptoKey): Uint8Array => (
+	new Uint8Array(await window.crypto.subtle.exportKey('raw', key))
+);
