@@ -6,7 +6,7 @@ export type Button = {
 }
 
 export type Message = {
-    sender: 'user' | 'bot',
+    sender: 'user' | 'bot' | 'person',
     text: string,
     timestamp: Date,
     buttons?: Button[]
