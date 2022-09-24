@@ -222,7 +222,15 @@ export const send_flow = (step: number) => {
 
     console.log(step)
     if (create_chats.includes(step)) {
-        create_chat()
+        const chat_types: Record<number, string> = {
+            11: 'counseling',
+            12: 'wellbeing',
+            13: 'queer',
+            14: 'women',
+            15: 'SAFE',
+            16: 'RHA'
+        }
+        create_chat(chat_types[step])
     }
 }
 
@@ -230,7 +238,7 @@ const create_chats: number[] = [
     11, 12, 13, 14, 15, 16
 ]
 
-const create_chat = async () => {
+const create_chat = async (chat_type: string) => {
     const { data, error } = await supabase
         .from('users')
         .insert({})
@@ -242,7 +250,7 @@ const create_chat = async () => {
 
     const response = await fetch('/chat', {
         method: 'POST',
-        body: JSON.stringify({ id: data[0].id }),
+        body: JSON.stringify({ id: data[0].id, chat_type: chat_type }),
         headers: {
           'content-type': 'application/json'
         }

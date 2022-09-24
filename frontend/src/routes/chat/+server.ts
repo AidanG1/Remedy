@@ -3,7 +3,7 @@ import { supabaseAdmin } from '$lib/db';
  
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
-  const { id } = await request.json();
+    const { id, chat_type } = await request.json();
     const { data, error } = await supabaseAdmin
         .from('users')
         .select('id')
@@ -16,7 +16,7 @@ export async function POST({ request }) {
     }
     const { data: data2, error: error2 } = await supabaseAdmin
         .from('chats')
-        .insert({})
+        .insert({chat_type: chat_type})
 
     if (error2) {
         console.log(error2)
