@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { flow } from '$lib/Flow/flow';
+    import Breadcrumbs from '$lib/Components/Breadcrumbs.svelte';
+import { flow } from '$lib/Flow/flow';
     import {question_path } from '$lib/Stores/stores';
 
     let question_num: number = 0;
@@ -10,6 +11,7 @@
     };
 </script>
 
+<Breadcrumbs />
 <div class="hero min-h-full bg-base-200 h-">
     <div class="hero-content text-center">
         <div class="max-w-md">

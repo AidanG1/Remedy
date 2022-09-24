@@ -5,6 +5,7 @@ interface FlowResponse {
 
 interface FlowStep {
     question: string,
+    short: string,
     responses: [FlowResponse]
 }
 
@@ -12,6 +13,7 @@ export const flow: Record<number, FlowStep> =
 {
     0: {
         'question': 'Do you or anyone you know need immediate medical or psychiatric attention?',
+        'short': 'Medical attention',
         'responses': [
             {
                 'text': 'Yes',
