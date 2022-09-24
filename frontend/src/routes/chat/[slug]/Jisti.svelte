@@ -9,9 +9,10 @@
         const domain = 'meet.jit.si';
         const options = {
             roomName: chat_id,
+            title: 'cRICEis Averted',
             noSSL: false,
-            width: 700,
-            height: 700,
+            width: 200,
+            height: 200,
             parentNode: video_call,
             lang: 'en',
             configOverwrite: {

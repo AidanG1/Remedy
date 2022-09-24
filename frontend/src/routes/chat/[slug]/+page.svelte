@@ -98,12 +98,14 @@
 </script>
 
 <div class="flex justify-center">
-    <h1  class="mr-2">You are chatting with a verified user</h1>
-    <button on:click={() => {meeting = true;}} class="btn btn-primary">Start encrypted voice or video call</button>
-    {#if meeting}
-        <Jisti chat_id={chat} />
-    {/if}
+    <h1 class="mr-2">You are chatting with a verified user</h1>
+    <button on:click={() => {meeting = true; send_user_message('Joining the encrypted meeting!')}} class="btn btn-primary">Start encrypted voice or video call</button>
 </div>
+{#if meeting}
+<div class="flex justify-center mt-2 absolute top-4 right-4">
+    <Jisti chat_id={chat} />
+</div>
+{/if}
 <Chat />
 {#if $default_message}
 <button class="btn btn-outline" on:click={()=>{send_user_message($default_message); $default_message=''}}>{$default_message}</button>
