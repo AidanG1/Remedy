@@ -1,12 +1,8 @@
 <script lang="ts">
-    import { flow, send_flow } from '$lib/Flow/flow';
+    import { send_flow } from '$lib/Flow/flow';
     import { messages } from '$lib/Stores/stores';
     import { send_user_message } from '$lib/Utils/utils';
     import { slide } from 'svelte/transition';
-
-    if ($messages.length == 0) {
-        send_flow(0);
-    }
 
     let chatDiv: HTMLElement;
 

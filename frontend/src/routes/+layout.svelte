@@ -3,10 +3,15 @@
 	import ThemeChange from '$lib/Components/ThemeChange.svelte';
 </script>
 
+<svelte:head>
+    <title>uncRICEis</title>
+</svelte:head>
+
 <div class="h-screen">
     <div class="navbar bg-base-100 border border-primary">
         <div class="navbar-start">
             <div class="dropdown">
+                <!-- svelte-ignore a11y-label-has-associated-control -->
                 <label tabindex="0" class="btn btn-ghost lg:hidden">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +45,7 @@
         </div>
         <div class="navbar-end">
             <ThemeChange />
-            <a class="btn btn-outline btn-accent" href="https://github.com/AidanG1/HackRice12" target="_blank">Source</a>
+            <a class="btn btn-primary" href="https://github.com/AidanG1/HackRice12" target="_blank">Source</a>
         </div>
     </div>
     <slot />

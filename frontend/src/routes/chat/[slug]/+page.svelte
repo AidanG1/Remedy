@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { supabase } from '$lib/db';
-    import { messages } from '$lib/Stores/stores';
+    import { default_message, messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
@@ -59,7 +59,7 @@
             .insert([
                 {
                     chat: chat,
-                    sender: 'user',
+                    sender: localStorage.getItem('user_type') ? 'person' : 'user',
                     text: message,
                 },
             ])
@@ -72,4 +72,7 @@
 </script>
 
 <Chat />
+{#if $default_message}
+<button class="btn btn-outline" on:click={()=>{send_user_message($default_message); $default_message=''}}>{$default_message}</button>
+{/if}
 <UserSend {send_user_message} />
