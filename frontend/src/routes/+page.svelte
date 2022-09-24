@@ -9,11 +9,14 @@
     const send_user_message = (message: string) => {
         $messages = [...$messages, { sender: 'user', text: message, timestamp: new Date() }];
     }
+
+    let message: string = '';
 </script>
 
-<div class="grid w-full">
+<div class="w-full h-5/6 flex flex-col">
     {#each $messages as message}
-        <div class="max-w-8/12 w-full rounded-lg p-2 border border-secondary {message.sender==='bot' ? 'flex' : 'flex-row-reverse'}">
+    <div class="w-full  my-1">
+        <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border border-secondary {message.sender==='bot' ? '' : 'float-right'}">
             {message.text}
             {#if 'buttons' in message}
                 <div>
@@ -36,6 +39,13 @@
                     {/each}
                 </div>
             {/if}
-        </div>
+        </div></div>
     {/each}
+</div>
+<div>
+    <input type="text" bind:value={message} placeholder="Type a message..." class="input input-bordered input-primary w-5/6" />
+    <button class="btn btn-primary " on:click={() => {
+        send_user_message(message);
+        message = '';
+    }}>Send</button>
 </div>
