@@ -2,17 +2,17 @@
 	import { supabase } from '$lib/db';
     import { onMount } from 'svelte';
 
-    let active_chat: string = '';
+    let active_chat: any = '';
 
     onMount(() => {
         fetch(
-            'chat/all/user_type', {
+            '/chat/all/user_type', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    user_type: localStorage.getItem('id')
+                    id: localStorage.getItem('id')
                 })
             }
         ).then(res => res.json()).then(data => {
@@ -30,4 +30,8 @@
     });
 </script>
 
-<h1>Chat request for {active_chat.chat_type}</h1>
+{#if active_chat}
+<h1><a href="/chat/{active_chat.id}">Chat request for {active_chat.chat_type}</a></h1>
+{:else}
+<h1>No chat requests since log in</h1>
+{/if}
