@@ -228,7 +228,7 @@ const create_chats: number[] = [
     11, 12, 13, 14, 15, 16
 ]
 
-const create_chat = async () => {
+export const create_chat = async () => {
     const { data, error } = await supabase
         .from('users')
         .insert()
