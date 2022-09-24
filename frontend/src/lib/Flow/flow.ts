@@ -219,3 +219,9 @@ export const send_flow = (step: number) => {
     })
 }
 
+const create_chats: number[] = [
+    11, 12, 13, 14, 15, 16
+]
+
+const create_chat = () => {
+}
