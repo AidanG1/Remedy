@@ -80,8 +80,9 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Tailwind][Tailwindcss.com.com]][Tailwind-url]
+* <a href="https://svelte.dev"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Svelte_Logo.svg/996px-Svelte_Logo.svg.png?20191219133350" style="width: 1rem">Svelte</a>
+* <a href="https://tailwindcss.com"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1200px-Tailwind_CSS_Logo.svg.png?20211001194333" style="width: 1rem">Tailwind</a>
+* <a href="https://supabase.com"><img src="supabase-logo-icon.png" style="width: 8rem">Supabase</a>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -157,8 +158,3 @@ Thomas Kaldahl - [ei14](https://github.com/ei14)
 Shreyas Minocha - [shreyasminocha](https://github.com/shreyasminocha)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Tailwindcss.com]: https://img.shields.io/badge/Tailwind?style=for-the-badge&logo=tailwindcss&logoColor=#62b8f2
-[Tailwind-url]: https://tailwindcss.com/
