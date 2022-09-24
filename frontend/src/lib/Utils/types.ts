@@ -2,13 +2,13 @@ export type Button = {
     text: string,
     user_send?: string,
     hyperlink?: string,
-    next_step?: number
+    next?: number
 }
 
 export type Message = {
     sender: 'user' | 'bot',
     text: string,
-    timestamp: number,
-    buttons: Button[]
+    timestamp: Date,
+    buttons?: Button[]
 }
 

@@ -18,7 +18,7 @@ export const flow: Record<number, FlowStep> =
             {
                 'text': 'No',
                 'user_send': 'No',
-                'next_step': 1
+                'next': 1
             }
         ]
     },
@@ -29,7 +29,7 @@ export const send_flow = (step: number) => {
         messages.push({
             'sender': 'bot',
             'text': flow[step].text,
-            'timestamp': Date.now(),
+            'timestamp': new Date(),
             'buttons': flow[step].buttons
         })
         return messages
