@@ -217,4 +217,15 @@ export const send_flow = (step: number) => {
         })
         return messages
     })
+
+    if (create_chats.includes(step)) {
+        create_chat()
+    }
+}
+
+const create_chats: number[] = [
+    11, 12, 13, 14, 15, 16
+]
+
+const create_chat = () => {
 }
