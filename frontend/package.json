@@ -29,6 +29,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"daisyui": "^2.31.0"
+		"@supabase/supabase-js": "^1.35.7",
+		"daisyui": "^2.31.0",
+		"dotenv": "^16.0.2"
 	}
 }
