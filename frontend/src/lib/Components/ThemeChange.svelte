@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	let theme_options = ['light', 'dark', 'bumblebee', 'halloween', 'dracula', 'autumn', 'forest'];
+	let theme_options: string[] = ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"];
 	let theme_choice: string | null = '';
 	let theme_change = (theme: string|null) => {};
 	$: {
