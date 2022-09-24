@@ -4,6 +4,7 @@
     import { messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
     import Chat from '../../Chat.svelte'
+    import UserSend from '../../UserSend.svelte';
 
     const chat = $page.params.slug;
 
@@ -69,10 +70,4 @@
 </script>
 
 <Chat />
-<div>
-    <input type="text" bind:value={message} placeholder="Type a message..." class="input input-bordered input-primary w-5/6" />
-    <button class="btn btn-primary " on:click={() => {
-        send_user_message(message);
-        message = '';
-    }}>Send</button>
-</div>
+<UserSend {send_user_message} />

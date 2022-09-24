@@ -2,21 +2,22 @@
     import { flow, send_flow } from '$lib/Flow/flow';
     import { messages } from '$lib/Stores/stores';
     import { send_user_message } from '$lib/Utils/utils';
+    import { slide } from 'svelte/transition';
 
     if ($messages.length == 0) {
         send_flow(0);
     }
 </script>
 
-<div class="w-full h-5/6 flex flex-col">
+<div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-2">
     {#each $messages as message}
-    <div class="w-full  my-1">
-        <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border border-secondary { (message.sender==='bot' || message.sender === 'person') ? '' : 'float-right'}">
+    <div class="w-full my-1" in:slide>
+        <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border drop-shadow-md hover:scale-105 transition-transform { (message.sender==='bot' || message.sender === 'person') ? 'bg-secondary' : 'bg-primary float-right'}">
             {message.text}
             {#if 'buttons' in message}
                 <div>
                     {#each message.buttons !== undefined ? message.buttons : [] as button}
-                        <button class="btn btn-primary m-1" 
+                        <button class="btn btn-accent m-1" 
                         on:click={() => {
                             if (button.hyperlink !== undefined) {
                                 window.open(button.hyperlink, '_blank');
