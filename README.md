@@ -16,7 +16,7 @@
     <img src="/favicon.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">uncRICEis</h3>
+  <h3 align="center">cRICEis Averted</h3>
 
   <p align="center">
     Solving urgent mental health crises: securely, intelligently, and anonymously 

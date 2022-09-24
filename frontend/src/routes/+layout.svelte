@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-    <title>uncRICEis</title>
+    <title>cRICEis Averted</title>
 </svelte:head>
 
 <div class="h-screen">
@@ -35,7 +35,7 @@
                     <li><a href="/resources">Resources</a></li>
                 </ul>
             </div>
-            <a class="btn btn-ghost normal-case text-xl" href="/">uncRICEis</a>
+            <a class="btn btn-ghost normal-case text-xl" href="/">cRICEis Averted</a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal p-0">
