@@ -78,22 +78,19 @@
         
         console.log('decrypted', new TextDecoder().decode(decryptedMessage));
 
-        supabase
-            .from('messages')
-            .insert([
-                {
-                    chat: chat,
-                    sender: localStorage.getItem('user_type') ? 'person' : 'user',
-                    text: message,
-                    // ciphertext: ciphertextEncoded,
-                    // iv: ivEncoded,
-                },
-            ])
-            .then(({ data, error }) => {
-                if (error) {
-                    console.log(error);
-                }
-            });
+        const id = localStorage.getItem('uuid') ?? 'unknown';
+
+        fetch(`/chat/${chat}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat: chat,
+                uuid: id,
+                text: message,
+            })
+        });
     }
 </script>
 
