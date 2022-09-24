@@ -3,7 +3,7 @@
 	import ThemeChange from '$lib/Components/ThemeChange.svelte';
 </script>
 
-<div class="container h-screen">
+<div class="h-screen">
     <div class="navbar bg-base-100 border border-primary">
         <div class="navbar-start">
             <div class="dropdown">

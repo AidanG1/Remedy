@@ -3,12 +3,11 @@
     import { supabase } from '$lib/db';
     import { messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
+	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
 
     const chat = $page.params.slug;
-
-    let message: string = '';
 
     let sent_messages: Message[] = [];
 
@@ -39,17 +38,20 @@
             }
         });
 
-    supabase.from('messages').on('INSERT', (new_chat: supabaseChat) => {
-        $messages = [
-            ...$messages,
-            {
-                sender: new_chat.sender,
-                text: new_chat.text,
-                timestamp: new Date(new_chat.created_at),
-            },
-        ];
-        }
-    ).subscribe();
+    supabase.from(`messages:chat=eq.${chat}`)
+        .on('INSERT', (new_chat: SupabaseRealtimePayload<supabaseChat>) => {
+            console.log(new_chat);
+            $messages = [
+                ...$messages,
+                {
+                    sender: new_chat.new.sender,
+                    text: new_chat.new.text,
+                    timestamp: new Date(new_chat.new.created_at),
+                },
+            ];
+            }
+        )
+        .subscribe();
 
     const send_user_message = (message: string) => {
         supabase
