@@ -239,24 +239,27 @@ const create_chats: number[] = [
 ]
 
 const create_chat = async (chat_type: string) => {
-    const { data, error } = await supabase
-        .from('users')
-        .insert({})
-    if (error) {
-        console.log(error)
+    let id = localStorage.getItem('uuid');
+
+    if (id === null) {
+        const response = await fetch('/user', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+        });
+        const data = await response.json();
+        id = data.uuid;
+        localStorage.setItem('uuid', id)
     }
-    
-    localStorage.setItem('uuid', data[0].id)
 
     const response = await fetch('/chat', {
         method: 'POST',
-        body: JSON.stringify({ id: data[0].id, chat_type: chat_type }),
+        body: JSON.stringify({ id, chat_type: chat_type }),
         headers: {
-          'content-type': 'application/json'
+            'content-type': 'application/json'
         }
-      });
+    });
   
-      let id = await response.json();
+    const data = await response.json();
 
-      goto(`/chat/${id.chat_id}`)
+    goto(`/chat/${data.chat_id}`)
 }
