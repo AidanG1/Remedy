@@ -6,8 +6,12 @@
     import { goto } from '$app/navigation';
 
     let active_chat: any = '';
+    let isVerified = false;
 
     onMount(() => {
+        let userType: string | null = null;
+
+        console.log(localStorage.getItem('uuid'))
         fetch(
             '/chat/all/user_type', {
                 method: 'POST',
@@ -15,18 +19,27 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: localStorage.getItem('id')
+                    id: localStorage.getItem('uuid')
                 })
             }
         ).then(res => res.json()).then(data => {
-            localStorage.setItem('user_type', data.user_type);
+            userType = data.user_type;
+            console.log(userType);
+
+            if (userType !== null) {
+                isVerified = true;
+            } else {
+                return;
+            }
+            
+            localStorage.setItem('user_type', userType);
             $default_message = data.default_message;
         });
 
-        supabase.from(`chats:chat_type=eq.${localStorage.getItem('user_type')}`)
+        supabase.from(`chats:chat_type=eq.${userType}`)
             .on('INSERT', (new_chat) => {
                 console.log('new chat', new_chat);
-                if (new_chat.new.chat_type === localStorage.getItem('user_type')) {
+                if (new_chat.new.chat_type === userType) {
                     active_chat = new_chat.new;
                 }
             })
@@ -34,6 +47,7 @@
     });
 </script>
 
+{#if isVerified}
 <div class="hero min-h-screen bg-base-200">
     <div class="hero-content text-center">
         <div class="max-w-md">
@@ -46,3 +60,6 @@
         </div>
     </div>
 </div>
+{:else}
+<div>unauthorized</div>
+{/if}
