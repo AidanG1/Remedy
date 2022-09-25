@@ -32,16 +32,16 @@
         Compounded by stories of Rice student services breaching confidentiality and compelling students to unenroll
         or take time off in response to self-reported mental health concerns, the clear need for streamlined, anonymous
         mental health access on campus arises.`,
-        `cRICEsis Averted responds to this problem by offering secure, intelligent, and anonymous access to Rice's mental
+        `Remedy responds to this problem by offering secure, intelligent, and anonymous access to Rice's mental
         health services. Our site enables people facing any type of mental health crisis to interact with a chatbot that
         directs them to either (1) RUPD/REMS/988 in the case of a life-threatening, serious crisis; (2) an appointment
         with the most appropriate on-campus organization to meet their specific needs; or (3) a real-time chatting
         session with a Rice-employed mental health professional or verified student volunteer, with the option for
         video chat as well.`,
-        `cRICEis Averted uses ECDH encryption for key exchange. AES-GCM is then used for symmetric encryption of messages.
+        `Remedy uses ECDH encryption for key exchange. AES-GCM is then used for symmetric encryption of messages.
         Voice and video calls are encrypted and hosted on Jitsi. All messages with the bot are stored on device, and all
         student user accounts are anonymous.`,
-        `Through cRICEsis Averted, we hope to deconstruct the stigma surrounding mental health outreach on campus,
+        `Through Remedy, we hope to deconstruct the stigma surrounding mental health outreach on campus,
         enable more efficient navigation of Rice's resources, and dismantle other security-related challenges
         uniquely facing Rice students in their journey to prioritize mental health.`
     ]
