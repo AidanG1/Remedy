@@ -28,7 +28,7 @@ Built in less than 36 hours, Remedy addresses barriers to accessing mental healt
 ## 💡Inspiration<a name="inspiration"></a>
 University life carries with it a lot of stress. Yet, given Rice’s consistent placement at the top of the national “happiest student” rankings, many believe that mental health concerns are not relevant to our students.
  
-This couldn’t be further from the truth — surveys conducted every few years indicate that Rice's student body closely follows nationwide trends in many aspects of mental health. Consequently, the university offers a plethora of resources, such as the Wellbeing Office, the Counseling Center, and Student Health Services, to address student needs when they inevitably arise.
+This couldn’t be more false — surveys conducted every few years indicate that Rice's student body closely follows nationwide trends in many aspects of mental health. Consequently, the university offers a plethora of resources, such as the Wellbeing Office, the Counseling Center, and Student Health Services, to address student needs when they inevitably arise.
  
 Nevertheless, the characterization of Rice’s campus as one filled with the “happiest students” in the country can make seeking help from these resources feel like a stigmatizing, shameful, and isolating experience. Compounded by multiple stories of Rice student services [breaching confidentiality](https://tinyurl.com/583k5yzy) and [compelling students to unenroll](https://tinyurl.com/25tx55yu) or take time off in response to self-reported mental health concerns, the need for a streamlined and anonymous mental health resource like _Remedy_ becomes clear.
 
@@ -54,6 +54,5 @@ To further punctuate this need, we talked to licensed therapists and other stake
    - Supabase (backend)
    - Web Crypto API (cryptographic primitives)
    - Tailwind & Daisy (ui & design)
-   - Domain.com (domain registration & management)
-   - Cloudflare (security & performance)
+   - Jitsi (video calling)
    - GPT-3 for natural language processing and artificial intelligence
