@@ -156,7 +156,7 @@
                     sent_messages = await Promise.all(
                         data.map(async (message: supabaseChat) => {
                             return {
-                                sender: message.sender,
+                                sender: message.sender as 'user' | 'bot' | 'person',
                                 text: await decrypt(message),
                                 timestamp: new Date(message.created_at),
                             };
@@ -172,7 +172,7 @@
                 $messages = [
                     ...$messages,
                     {
-                        sender: new_message.new.sender,
+                        sender: new_message.new.sender as 'user' | 'bot' | 'person',
                         text: await decrypt(new_message.new),
                         timestamp: new Date(new_message.new.created_at),
                     },
