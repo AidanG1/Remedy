@@ -1,7 +1,9 @@
 import type { Button } from "$lib/Utils/types";
+import { createEcdhKey, exportKey } from '$lib/Utils/crypto';
 import { messages } from "$lib/Stores/stores";
 import { supabase } from "$lib/db";
 import { goto } from '$app/navigation';
+import { encode } from 'uint8-to-b64';
 
 type FlowStep = {
     text: string,
@@ -240,7 +242,6 @@ const create_chats: number[] = [
 
 const create_chat = async (chat_type: string) => {
     let id = localStorage.getItem('uuid');
-
     if (id === null) {
         const response = await fetch('/user', {
             method: 'POST',
@@ -251,9 +252,24 @@ const create_chat = async (chat_type: string) => {
         localStorage.setItem('uuid', id)
     }
 
+    let public_key = localStorage.getItem('public_key');
+    if (public_key === null) {
+        const keypair = await createEcdhKey();
+
+        public_key = await exportKey(keypair.publicKey);
+        localStorage.setItem('public_key', public_key);
+    }
+
+    console.log(public_key);
+    console.log('pub', encode(public_key));
+
     const response = await fetch('/chat', {
         method: 'POST',
-        body: JSON.stringify({ id, chat_type: chat_type }),
+        body: JSON.stringify({
+            id,
+            chat_type: chat_type,
+            public_key: encode(public_key),
+        }),
         headers: {
             'content-type': 'application/json'
         }
