@@ -23,26 +23,26 @@
         created_at: string
     }
 
-    onMount(() => {
-        let keypair: CryptoKeyPair;
-        createEcdhKey().then(async (kp) => {
-            keypair = kp;
-            
-            const id = localStorage.getItem('uuid') ?? 'unknown';
-            const public_key = await exportKey(keypair.publicKey);
-            console.log(encode(public_key));
-            const res = await fetch(`/chat/${chat}/join`, {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({
-                    chat,
-                    uuid: id,
-                    public_key: encode(public_key),
-                }),
-            });
-            const data = await res.json();
-            console.log(data);
+    onMount(async () => {
+        let public_key = localStorage.getItem('public_key');
+        if (public_key === null) {
+            const keypair = await createEcdhKey();
+            public_key = encode(await exportKey(keypair.publicKey));
+            localStorage.setItem('public_key', public_key);
+        }
+        console.log(public_key);
+        const id = localStorage.getItem('uuid') ?? 'unknown';
+        const res = await fetch(`/chat/${chat}/join`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+                chat,
+                uuid: id,
+                public_key: public_key,
+            }),
         });
+        const data = await res.json();
+        console.log(data);
     });
 
     supabase
