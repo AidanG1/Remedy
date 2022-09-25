@@ -7,12 +7,10 @@
 
     let active_chat: any = '';
     let isVerified = false;
+    let userType: string | null = null;
 
-    onMount(() => {
-        let userType: string | null = null;
-
-        console.log(localStorage.getItem('uuid'))
-        fetch(
+    async function loadSupa() {
+        const response = await fetch(
             '/chat/all/user_type', {
                 method: 'POST',
                 headers: {
@@ -22,20 +20,19 @@
                     id: localStorage.getItem('uuid')
                 })
             }
-        ).then(res => res.json()).then(data => {
-            userType = data.user_type;
-            console.log(userType);
+        )
+        const data = await response.json()
+        userType = data.user_type;
+        console.log(userType);
 
-            if (userType !== null) {
-                isVerified = true;
-            } else {
-                return;
-            }
-            
-            localStorage.setItem('user_type', userType);
-            $default_message = data.default_message;
-        });
-
+        if (userType !== null) {
+            isVerified = true;
+        } else {
+            return;
+        }
+        
+        localStorage.setItem('user_type', userType);
+        $default_message = data.default_message;
         supabase.from(`chats:chat_type=eq.${userType}`)
             .on('INSERT', (new_chat) => {
                 console.log('new chat', new_chat);
@@ -44,16 +41,19 @@
                 }
             })
             .subscribe();
-    });
+    }
 </script>
 
+{#await loadSupa()}
+Loading
+{:then}
 {#if isVerified}
 <div class="hero min-h-screen bg-base-200">
     <div class="hero-content text-center">
         <div class="max-w-md">
             {#if active_chat}
                 <h1 class="text-5xl font-bold" in:fly><a href="/chat/{active_chat.id}">Chat request for {active_chat.chat_type}</a></h1>
-                <button class="btn btn-primary" on:click={async () => {
+                <button class="btn btn-primary btn-lg mt-2" on:click={async () => {
                     goto(`/chat/${active_chat.id}`);
                 }}>Chat</button>
             {:else}
@@ -65,3 +65,4 @@
 {:else}
 <div>unauthorized</div>
 {/if}
+{/await}
