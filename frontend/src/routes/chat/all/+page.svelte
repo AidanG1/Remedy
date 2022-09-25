@@ -53,7 +53,9 @@
         <div class="max-w-md">
             {#if active_chat}
                 <h1 class="text-5xl font-bold" in:fly><a href="/chat/{active_chat.id}">Chat request for {active_chat.chat_type}</a></h1>
-                <button class="btn btn-primary" on:click={()=>{goto(`/chat/${active_chat.id}`)}}>Chat</button>
+                <button class="btn btn-primary" on:click={async () => {
+                    goto(`/chat/${active_chat.id}`);
+                }}>Chat</button>
             {:else}
                 <h1 class="text-5xl font-bold">No chat requests since log in</h1>
             {/if}

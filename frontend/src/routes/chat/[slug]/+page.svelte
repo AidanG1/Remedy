@@ -4,11 +4,12 @@
     import { supabase } from '$lib/db';
     import { default_message, messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
-    import { decryptMessage, encryptMessage } from '$lib/Utils/crypto';
+    import { createEcdhKey, exportKey, decryptMessage, encryptMessage } from '$lib/Utils/crypto';
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
 	import Jitsi from './Jitsi.svelte';
+	import { onMount } from 'svelte';
 
     const chat = $page.params.slug;
 
@@ -21,6 +22,28 @@
         sender: string,
         created_at: string
     }
+
+    onMount(() => {
+        let keypair: CryptoKeyPair;
+        createEcdhKey().then(async (kp) => {
+            keypair = kp;
+            
+            const id = localStorage.getItem('uuid') ?? 'unknown';
+            const public_key = await exportKey(keypair.publicKey);
+            console.log(encode(public_key));
+            const res = await fetch(`/chat/${chat}/join`, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    chat,
+                    uuid: id,
+                    public_key: encode(public_key),
+                }),
+            });
+            const data = await res.json();
+            console.log(data);
+        });
+    });
 
     supabase
         .from('messages')
