@@ -225,7 +225,9 @@
 {#if $default_message}
 <button class="btn btn-outline" on:click={()=>{send_user_message($default_message); $default_message=''}}>{$default_message}</button>
 {/if}
-<UserSend {send_user_message} />
+<div class="fixed bottom-0 w-full">
+    <UserSend {send_user_message} />
+</div>
 {:else}
 <div>something went wrong</div>
 {/if}

@@ -11,4 +11,6 @@
 </script>
 
 <Chat />
-<UserSend {send_user_message} />
+<div class="fixed bottom-0 w-full">
+    <UserSend {send_user_message} />
+</div>
