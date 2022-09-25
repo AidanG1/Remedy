@@ -13,8 +13,8 @@
     async function getResponse(prompt: string) {
         response = await openai.createCompletion({
             model: "text-davinci-002",
-            prompt: `Respond to: ${prompt}:`,
-            temperature: 0,
+            prompt: `Give mental health advice to: ${prompt}`,
+            temperature: 1,
             max_tokens: 50,
         });
     }
