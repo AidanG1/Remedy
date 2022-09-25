@@ -40,7 +40,7 @@ export const flow: Record<number, FlowStep> =
                 next: 3
             },
             {
-                text: 'Chat',
+                text: 'AI Chat',
                 hyperlink: 'chat/ai'
             }
         ]
@@ -99,7 +99,7 @@ export const flow: Record<number, FlowStep> =
                 hyperlink: 'https://wellbeing.rice.edu/',
             },
             {
-                text: 'I want to chat anonymously with a mental health resource',
+                text: 'Anonymous chat with a mental health resource',
                 user_send: 'Human',
                 next: 5
             }
