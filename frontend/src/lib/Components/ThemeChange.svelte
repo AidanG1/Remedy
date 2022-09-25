@@ -20,7 +20,7 @@
 	});
 </script>
 
-<select class="select max-w-xs select-bordered mr-2 select-secondary" bind:value={theme_choice}>
+<select class="select max-w-xs select-bordered mr-2 select-secondary hidden md:block" bind:value={theme_choice}>
 	{#each theme_options as theme_option}
 		<option value={theme_option}>{theme_option.toLocaleUpperCase()}</option>
 	{/each}
