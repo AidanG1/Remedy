@@ -8,7 +8,7 @@
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
-	import Jisti from './Jisti.svelte';
+	import Jitsi from './Jitsi.svelte';
 
     const chat = $page.params.slug;
 
@@ -103,7 +103,7 @@
 </div>
 {#if meeting}
 <div class="flex justify-center mt-2 absolute top-4 right-4">
-    <Jisti chat_id={chat} />
+    <Jitsi chat_id={chat} />
 </div>
 {/if}
 <Chat />

@@ -22,8 +22,8 @@ Inspiration
 ## 🔮Future Todos:<a name="future"></a>
 	- Multiple language support
 		
-## 🤖Techstack:<a name="tech"></a>
 ![lighthouse](lighthouse.png)
+## 🤖Techstack:<a name="tech"></a>
 	- Svelte & SvelteKit (frontend)
 	- Supabase (backend)
 	- Tailwind & Daisy (ui & design)
