@@ -261,7 +261,7 @@ const create_chat = async (chat_type: string) => {
         const keypair = await createEcdhKey();
 
         public_key = await exportKey(keypair.publicKey);
-        localStorage.setItem('public_key', public_key);
+        localStorage.setItem('public_key', encode(public_key));
     }
 
     console.log(public_key);

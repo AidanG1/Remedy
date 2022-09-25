@@ -13,23 +13,29 @@
     async function getResponse(prompt: string) {
         response = await openai.createCompletion({
             model: "text-davinci-002",
-            prompt: `In the voice of a therapist: match ${prompt} to one of the options: long-term distress, short-term stress, suicidal ideation, clinical services, wellbeing advising, queer, women`,
-            temperature: 0,
+            prompt: `Give brief mental health advice to: ${prompt}`,
+            temperature: 1,
             max_tokens: 50,
         });
     }
 
     const send_user_message = async (message: string) => {
-        await getResponse(message);
         console.log(response);
+
         messages.update((old_messages) => {
             return [...old_messages, {
                 sender: 'user',
                 text: message,
                 timestamp: new Date()
-            }, {
+            }];
+        })
+
+        await getResponse(message);
+
+        messages.update((old_messages) => {
+            return [...old_messages, {
                 sender: 'bot',
-                text: response.data.choices[0].text,
+                text: response.data.choices[0].text + " ...",
                 timestamp: new Date()
             }];
         })

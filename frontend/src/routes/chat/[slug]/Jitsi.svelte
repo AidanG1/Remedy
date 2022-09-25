@@ -9,7 +9,7 @@
         const domain = 'meet.jit.si';
         const options = {
             roomName: chat_id,
-            title: 'cRICEis Averted',
+            title: 'Remedy',
             noSSL: false,
             width: 200,
             height: 200,
