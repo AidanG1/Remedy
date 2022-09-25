@@ -14,16 +14,29 @@
     const chat = $page.params.slug;
 
     let sent_messages: Message[] = [];
+    let sharedKey: string | null | undefined;
+    let sharedKeyUnencoded: CryptoKey;
 
     type supabaseChat = {
         id: string,
         text: string,
+        ciphertext: string,
+        iv: string,
         message: string,
         sender: string,
         created_at: string
     }
 
     let didError = false;
+
+    const decrypt = async (message: supabaseChat) => {
+        const plaintextBytes = await decryptMessage(
+            sharedKeyUnencoded,
+            decode(message.ciphertext),
+            decode(message.iv),
+        );
+        return new TextDecoder().decode(plaintextBytes);
+    };
 
     onMount(async () => {
         const id = localStorage.getItem('uuid') ?? 'unknown';
@@ -93,7 +106,7 @@
             ]);
             publicKeys.delete(public_key);
             const theirPublickey = Array.from(publicKeys.values())[0];
-            const sharedKey = await deriveSharedKey(
+            sharedKeyUnencoded = await deriveSharedKey(
                 privateKeyUnencoded,
                 await window.crypto.subtle.importKey(
                     'raw',
@@ -103,10 +116,11 @@
                     ['deriveKey'],
                 ),
             );
-            localStorage.setItem('shared_key', encode(await exportKey(sharedKey)));
+            sharedKey = encode(await exportKey(sharedKeyUnencoded))
+            localStorage.setItem('shared_key', sharedKey);
         };
 
-        const sharedKey = localStorage.getItem('shared_key');
+        sharedKey = localStorage.getItem('shared_key');
         if (sharedKey === null) {
             const res = await supabase
                 .from('chats')
@@ -121,65 +135,59 @@
             } else {
                 await deriveAndSetSharedKey(res.data);
             }
+        } else {
+            sharedKeyUnencoded = await window.crypto.subtle.importKey(
+                'raw', decode(sharedKey),
+                { name: 'AES-GCM', length: 256 },
+                true,
+                ['encrypt', 'decrypt'],
+            );
         }
+    
+        supabase
+            .from('messages')
+            .select('*')
+            .eq('chat', chat)
+            .then(({ data, error }) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    sent_messages = data.map(async (message: supabaseChat) => {
+                        return {
+                            sender: message.sender,
+                            text: await decrypt(message),
+                            timestamp: new Date(message.created_at),
+                        };
+                    });
+                    $messages = [...$messages, ...sent_messages];
+                }
+            });
+    
+        supabase.from(`messages:chat=eq.${chat}`)
+            .on('INSERT', async (new_message: SupabaseRealtimePayload<supabaseChat>) => {
+                console.log(new_message);
+                $messages = [
+                    ...$messages,
+                    {
+                        sender: new_message.new.sender,
+                        text: await decrypt(new_message.new),
+                        timestamp: new Date(new_message.new.created_at),
+                    },
+                ];
+                }
+            )
+            .subscribe();
     });
 
-    supabase
-        .from('messages')
-        .select('*')
-        .eq('chat', chat)
-        .then(({ data, error }) => {
-            if (error) {
-                console.log(error);
-            } else {
-                sent_messages = data.map((message: supabaseChat) => {
-                    return {
-                        sender: message.sender,
-                        text: message.text,
-                        timestamp: new Date(message.created_at),
-                    };
-                });
-                $messages = [...$messages, ...sent_messages];
-            }
-        });
-
-    supabase.from(`messages:chat=eq.${chat}`)
-        .on('INSERT', (new_message: SupabaseRealtimePayload<supabaseChat>) => {
-            console.log(new_message);
-            $messages = [
-                ...$messages,
-                {
-                    sender: new_message.new.sender,
-                    text: new_message.new.text,
-                    timestamp: new Date(new_message.new.created_at),
-                },
-            ];
-            }
-        )
-        .subscribe();
-
     const send_user_message = async (message: string) => {
-        // We're creating a key here just to make sure that we our
-        // encyrption and decryption work fine.
-        // Later, the key will be derived through ECDH.
-        const sharedKey = await window.crypto.subtle.generateKey(
-            { name: 'AES-GCM', length: 256 },
-            false,
-            ['encrypt', 'decrypt'],
-        );
+        if (sharedKey === undefined || sharedKey === null) {
+            throw new Error('no shared key yet');
+        }
+
         const messageBytes = new TextEncoder().encode(message);
-        const [ciphertext, iv] = await encryptMessage(sharedKey, messageBytes);
+        const [ciphertext, iv] = await encryptMessage(sharedKeyUnencoded, messageBytes);
         const ciphertextEncoded = encode(ciphertext);
         const ivEncoded = encode(iv);
-
-        console.log(ciphertext, iv);
-        console.log(ciphertextEncoded, ivEncoded);
-        
-        const ciphertextDecoded = decode(ciphertextEncoded);
-        const ivDecoded = decode(ivEncoded);
-        const decryptedMessage = await decryptMessage(sharedKey, ciphertextDecoded, ivDecoded);
-        
-        console.log('decrypted', new TextDecoder().decode(decryptedMessage));
 
         const id = localStorage.getItem('uuid') ?? 'unknown';
 
@@ -191,7 +199,8 @@
             body: JSON.stringify({
                 chat: chat,
                 uuid: id,
-                text: message,
+                ciphertext: ciphertextEncoded,
+                iv: ivEncoded,
             })
         });
     }

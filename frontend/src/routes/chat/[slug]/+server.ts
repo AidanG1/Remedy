@@ -3,7 +3,7 @@ import { supabaseAdmin } from '$lib/db';
  
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
-    const { chat, uuid, text } = await request.json();
+    const { chat, uuid, ciphertext, iv } = await request.json();
 
     const { data, error } = await supabaseAdmin
         .from('users')
@@ -20,9 +20,8 @@ export async function POST({ request }) {
             {
                 chat: chat,
                 sender: data.verification ? 'person' : 'user',
-                text: text,
-                // ciphertext: ciphertextEncoded,
-                // iv: ivEncoded,
+                ciphertext,
+                iv,
             },
         ])
         .then(({ data, error }) => {
