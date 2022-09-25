@@ -20,7 +20,7 @@ export const deriveSharedKey = async (
 		{ name: 'ECDH', public: publicKey },
 		privateKey,
 		AES_GCM_PARAMS,
-		false,
+		true,
 		['encrypt', 'decrypt'],
 	);
 	return sharedKey;

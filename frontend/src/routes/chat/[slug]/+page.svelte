@@ -4,7 +4,7 @@
     import { supabase } from '$lib/db';
     import { default_message, messages } from '$lib/Stores/stores';
     import type { Message } from '$lib/Utils/types';
-    import { createEcdhKey, exportKey, decryptMessage, encryptMessage } from '$lib/Utils/crypto';
+    import { createEcdhKey, exportKey, decryptMessage, encryptMessage, deriveSharedKey } from '$lib/Utils/crypto';
 	import type { SupabaseRealtimePayload } from '@supabase/supabase-js';
     import Chat from '../../Chat.svelte'
     import UserSend from '../../UserSend.svelte';
@@ -27,14 +27,33 @@
 
     onMount(async () => {
         const id = localStorage.getItem('uuid') ?? 'unknown';
-
+        let keypair: CryptoKeyPair;
+        let publicKeyUnencoded: CryptoKey, privateKeyUnencoded: CryptoKey;
         let public_key = localStorage.getItem('public_key');
-        if (public_key === null) {
-            const keypair = await createEcdhKey();
+        let private_key = localStorage.getItem('private_key');
+        if (public_key === null || private_key === null) {
+            keypair = await createEcdhKey();
+            publicKeyUnencoded = keypair.publicKey;
+            privateKeyUnencoded = keypair.privateKey;
+
             public_key = encode(await exportKey(keypair.publicKey));
+            private_key = JSON.stringify(
+                (await window.crypto.subtle.exportKey('jwk', keypair.privateKey))
+            );
             localStorage.setItem('public_key', public_key);
+            localStorage.setItem('private_key', private_key);
+        } else {
+            publicKeyUnencoded = await window.crypto.subtle.importKey(
+                'raw', decode(public_key),
+                { name: 'ECDH', namedCurve: 'P-384'},
+                true, ['deriveKey']
+            );
+            privateKeyUnencoded = await window.crypto.subtle.importKey(
+                'jwk', JSON.parse(private_key),
+                { name: 'ECDH', namedCurve: 'P-384'},
+                true, ['deriveKey']
+            );
         }
-        console.log(public_key);
 
         let { data, error } = await supabase
             .from('chats')
@@ -60,8 +79,48 @@
             data = await res.json();
             if (data.error !== undefined) {
                 didError = true;
+                return;
             }
-            console.log(data);
+        }
+
+        const deriveAndSetSharedKey = async (data: any) => {
+            if (data.members !== 2) {
+                return;
+            }
+            const publicKeys = new Set([
+                data.member_one_pubkey,
+                data.member_two_pubkey,
+            ]);
+            publicKeys.delete(public_key);
+            const theirPublickey = Array.from(publicKeys.values())[0];
+            const sharedKey = await deriveSharedKey(
+                privateKeyUnencoded,
+                await window.crypto.subtle.importKey(
+                    'raw',
+                    decode(theirPublickey),
+                    { name: 'ECDH', namedCurve: 'P-384' },
+                    true,
+                    ['deriveKey'],
+                ),
+            );
+            localStorage.setItem('shared_key', encode(await exportKey(sharedKey)));
+        };
+
+        const sharedKey = localStorage.getItem('shared_key');
+        if (sharedKey === null) {
+            const res = await supabase
+                .from('chats')
+                .select('members, member_one_pubkey, member_two_pubkey')
+                .eq('id', chat)
+                .single();
+            if (res.data.members < 2) {
+                supabase
+                    .from('chats')
+                    .on('UPDATE', (payload) => deriveAndSetSharedKey(payload.new))
+                    .subscribe();
+            } else {
+                await deriveAndSetSharedKey(res.data);
+            }
         }
     });
 
