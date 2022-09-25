@@ -3,10 +3,11 @@
     import { messages } from '$lib/Stores/stores';
     import { send_user_message } from '$lib/Utils/utils';
     import { slide } from 'svelte/transition';
+    import { onMount } from 'svelte';
 
     let chatDiv: HTMLElement;
 
-    const scrollToBottom = (messages: any) => {
+    const scrollToBottom = (messages?: any) => {
         if (chatDiv) {
             window.setTimeout(() => {
                 chatDiv.scrollTo({
@@ -17,12 +18,16 @@
         }
     }
 
+    onMount(() => {
+        scrollToBottom();
+    });
+
     $: {
         scrollToBottom($messages);
     }
 </script>
 
-<div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-2" bind:this={chatDiv}>
+<div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-4" bind:this={chatDiv}>
     {#each $messages as message}
     <div class="w-full my-0.5" in:slide>
         <div class="max-w-5/6 h-min w-fit {
