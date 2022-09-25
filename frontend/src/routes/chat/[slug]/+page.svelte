@@ -59,7 +59,7 @@
             publicKeyUnencoded = await window.crypto.subtle.importKey(
                 'raw', decode(public_key),
                 { name: 'ECDH', namedCurve: 'P-384'},
-                true, ['deriveKey']
+                true, []
             );
             privateKeyUnencoded = await window.crypto.subtle.importKey(
                 'jwk', JSON.parse(private_key),
@@ -113,7 +113,7 @@
                     decode(theirPublickey),
                     { name: 'ECDH', namedCurve: 'P-384' },
                     true,
-                    ['deriveKey'],
+                    [],
                 ),
             );
             sharedKey = encode(await exportKey(sharedKeyUnencoded))
