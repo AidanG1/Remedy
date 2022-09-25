@@ -23,7 +23,11 @@
         created_at: string
     }
 
+    let didError = false;
+
     onMount(async () => {
+        const id = localStorage.getItem('uuid') ?? 'unknown';
+
         let public_key = localStorage.getItem('public_key');
         if (public_key === null) {
             const keypair = await createEcdhKey();
@@ -31,18 +35,34 @@
             localStorage.setItem('public_key', public_key);
         }
         console.log(public_key);
-        const id = localStorage.getItem('uuid') ?? 'unknown';
-        const res = await fetch(`/chat/${chat}/join`, {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-                chat,
-                uuid: id,
-                public_key: public_key,
-            }),
-        });
-        const data = await res.json();
-        console.log(data);
+
+        let { data, error } = await supabase
+            .from('chats')
+            .select('member_one, member_two')
+            .eq('id', chat)
+            .single();
+        if (error) {
+            console.log(error);
+            return;
+        }
+
+        const userInChat = [data.member_one, data.member_two].includes(id);
+        if (!userInChat) {
+            const res = await fetch(`/chat/${chat}/join`, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    chat,
+                    uuid: id,
+                    public_key: public_key,
+                }),
+            });
+            data = await res.json();
+            if (data.error !== undefined) {
+                didError = true;
+            }
+            console.log(data);
+        }
     });
 
     supabase
@@ -120,6 +140,7 @@
     let meeting: boolean = false;
 </script>
 
+{#if !didError}
 <div class="flex justify-center">
     <h1 class="mr-2">You are chatting with a verified user</h1>
     <button on:click={() => {meeting = true; send_user_message('Joining the encrypted meeting!')}} class="btn btn-primary">Start encrypted voice or video call</button>
@@ -134,3 +155,6 @@
 <button class="btn btn-outline" on:click={()=>{send_user_message($default_message); $default_message=''}}>{$default_message}</button>
 {/if}
 <UserSend {send_user_message} />
+{:else}
+<div>something went wrong</div>
+{/if}
