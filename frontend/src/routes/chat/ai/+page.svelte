@@ -13,7 +13,7 @@
     async function getResponse(prompt: string) {
         response = await openai.createCompletion({
             model: "text-davinci-002",
-            prompt: `Respond to: ${prompt}:`,
+            prompt: `In the voice of a therapist: match ${prompt} to one of the options: long-term distress, short-term stress, suicidal ideation, clinical services, wellbeing advising, queer, women`,
             temperature: 0,
             max_tokens: 50,
         });
@@ -33,8 +33,15 @@
                 timestamp: new Date()
             }];
         })
-
     }
+
+    messages.update((old_messages) => {
+            return [...old_messages,{
+                sender: 'bot',
+                text: 'How are you feeling?',
+                timestamp: new Date()
+            }];
+        })
 </script>
 
 <Chat />
