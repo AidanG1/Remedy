@@ -38,7 +38,7 @@
         return new TextDecoder().decode(plaintextBytes);
     };
 
-    onMount(async () => {
+    async function startUp() {
         const id = localStorage.getItem('uuid') ?? 'unknown';
         let keypair: CryptoKeyPair;
         let publicKeyUnencoded: CryptoKey, privateKeyUnencoded: CryptoKey;
@@ -180,7 +180,7 @@
                 }
             )
             .subscribe();
-    });
+    }
 
     const send_user_message = async (message: string) => {
         if (sharedKey === undefined || sharedKey === null) {
@@ -211,6 +211,9 @@
     let meeting: boolean = false;
 </script>
 
+{#await startUp()}
+Loading
+{:then}
 {#if !didError}
 <div class="flex justify-center">
     <em class="mr-2">You are chatting with a verified user</em>
@@ -231,3 +234,4 @@
 {:else}
 <div>something went wrong</div>
 {/if}
+{/await}
