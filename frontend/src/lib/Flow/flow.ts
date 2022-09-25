@@ -38,6 +38,10 @@ export const flow: Record<number, FlowStep> =
                 text: 'No',
                 user_send: 'No',
                 next: 3
+            },
+            {
+                text: 'Chat',
+                hyperlink: 'chat/ai'
             }
         ]
     },
