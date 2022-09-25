@@ -213,8 +213,8 @@
 
 {#if !didError}
 <div class="flex justify-center">
-    <h1 class="mr-2">You are chatting with a verified user</h1>
-    <button on:click={() => {meeting = true; send_user_message('Joining the encrypted meeting!')}} class="btn btn-primary">Start encrypted voice or video call</button>
+    <em class="mr-2">You are chatting with a verified user</em>
+    <button on:click={() => {meeting = true; send_user_message('Joining the encrypted meeting!')}} class="btn btn-outline">Start secure voice or video call</button>
 </div>
 {#if meeting}
 <div class="flex justify-center mt-2 absolute top-4 right-4">

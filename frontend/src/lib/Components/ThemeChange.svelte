@@ -9,7 +9,7 @@
 	onMount(() => {
 		theme_choice = localStorage.getItem('theme');
 		if (!theme_choice) {
-			theme_choice = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'forest' : 'light';
+			theme_choice = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'black' : 'pastel';
 		}
 		theme_change = (theme: string|null) => {
 			if (theme) {

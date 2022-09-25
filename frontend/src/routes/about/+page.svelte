@@ -51,7 +51,7 @@
     <h1>About</h1>
     {#each paragraphs as p}
         <div class="opacity-0 transition-opacity duration-1000">
-            <p class="my-12 text-3xl">
+            <p class="my-12 text-xl">
                 {p}
             </p>
             <div class="divider"></div> 

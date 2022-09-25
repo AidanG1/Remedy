@@ -24,9 +24,13 @@
 
 <div class="w-full max-h-[80%] h-[80%] overflow-y-auto flex flex-col px-2" bind:this={chatDiv}>
     {#each $messages as message}
-    <div class="w-full my-1" in:slide>
-        <div class="max-w-5/6 h-min w-fit rounded-lg p-2 border drop-shadow-md hover:scale-105 transition-transform { (message.sender === 'bot' || message.sender === 'person') ? 'bg-base-300' : 'bg-primary float-right'}">
-            <span class="font-semibold { message.sender == 'user' ? 'text-primary-content' : '' }">{message.text}</span>
+    <div class="w-full my-0.5" in:slide>
+        <div class="max-w-5/6 h-min w-fit {
+            (message.sender === 'bot') ? 'rounded-sm' : 'rounded-full'} p-2 px-3 border drop-shadow-md {
+            (message.sender === 'bot' || message.sender === 'person')
+                ? 'bg-base-300'
+                : 'bg-primary float-right'}">
+            <span class="{ message.sender == 'user' ? 'text-primary-content' : '' }">{message.text}</span>
             {#if 'buttons' in message}
                 <div>
                     {#each message.buttons !== undefined ? message.buttons : [] as button}
