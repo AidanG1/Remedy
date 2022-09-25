@@ -35,7 +35,7 @@
                     <li><a href="/resources">Resources</a></li>
                 </ul>
             </div>
-            <a class="btn btn-ghost normal-case text-xl" href="/">Remedy</a>
+            <a class="btn btn-ghost normal-case text-xl" href="/">Remedy <img src="/logo.png" alt="logo" class="ml-2 w-8"></a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal p-0">

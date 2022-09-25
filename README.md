@@ -1,5 +1,6 @@
 # <a href="/" target="_blank">🍚Remedy</a>
 ###  Created by Aidan Gerber, Shreyas Minocha, Anthony Insalaco, and Thomas Kaldahl
+![Logo](frontend/static/logo.png)
 # Table of Contents
 1. [Quick Info](#quick-info)
 2. [About](#about)
