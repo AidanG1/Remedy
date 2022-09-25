@@ -148,17 +148,20 @@
             .from('messages')
             .select('*')
             .eq('chat', chat)
-            .then(({ data, error }) => {
+            .then(async ({ data, error }) => {
+                // behold this unholy combination of thens and awaits
                 if (error) {
                     console.log(error);
                 } else {
-                    sent_messages = data.map(async (message: supabaseChat) => {
-                        return {
-                            sender: message.sender,
-                            text: await decrypt(message),
-                            timestamp: new Date(message.created_at),
-                        };
-                    });
+                    sent_messages = await Promise.all(
+                        data.map(async (message: supabaseChat) => {
+                            return {
+                                sender: message.sender,
+                                text: await decrypt(message),
+                                timestamp: new Date(message.created_at),
+                            };
+                        })
+                    );
                     $messages = [...$messages, ...sent_messages];
                 }
             });
